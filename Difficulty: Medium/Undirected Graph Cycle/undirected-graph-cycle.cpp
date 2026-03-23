@@ -18,10 +18,11 @@ class Solution {
             {
                 return 1;
             }
-            if(DFS(adj[node][j],node,adj,visited))
+             if(DFS(adj[node][j],node,adj,visited))
             {
                 return 1;
             }
+           
             
          }
          return 0;
