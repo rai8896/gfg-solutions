@@ -1,45 +1,50 @@
 class Solution {
   public:
   
-  void dfs(int node,vector<int>adjLs[],vector<bool>&visited)
-  {
-      visited[node]=true;
-       for(int j=0;j<adjLs[node].size();j++)
-     {
-       if(!visited[adjLs[node][j]])
-       {
-           dfs(adjLs[node][j],adjLs,visited);
-       }
-   }
-   
-   
-  }
-    int countConnected(vector<vector<int>> adj, int V) {
-        
-        
-        // code here
-        
-        vector<int>adjLs[V];
-        for(int i=0;i<V;i++)
+    void dfs(int node,vector<vector<int>>&adj,vector<bool>&visited)
+    {
+        visited[node]=1;
+        for(auto it :adj[node])
         {
-            for(int j=0;j<V;j++)
+            if(!visited[it])
             {
-                if(adj[i][j]==1 && i!=j)
-                {
-                    adjLs[i].push_back(j);
-                    adjLs[j].push_back(i);
-                }
+                dfs(it,adj,visited);
             }
         }
         
-        vector<bool>visited(V,false);
+    }
+    
+    
+    int countConnected(int V, vector<vector<int>>& edges) {
+        // code here
+        
+        // 
+        //   ges = [[0,1], [2,1], [3,4]]
+        
+        // Iska matlab:
+        // 0 connected to 1
+        // 2 connected to 1
+        // 3 connected to 4
+        
+         // Step 1: adjacency list
+        vector<vector<int>>adj(V);
+        for(int i=0;i<edges.size();i++)
+        {
+            int u=edges[i][0];
+            int v=edges[i][1];
+            adj[u].push_back(v);
+            adj[v].push_back(u);
+        }
+        
+        vector<bool>visited(V,0);
+        // travers all node
         int count=0;
         for(int i=0;i<V;i++)
         {
             if(!visited[i])
             {
-                count++;
-                dfs(i,adjLs,visited);
+               count++;
+                dfs(i,adj,visited);
             }
         }
         return count;
