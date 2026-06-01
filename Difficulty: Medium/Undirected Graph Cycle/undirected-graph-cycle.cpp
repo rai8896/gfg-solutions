@@ -1,66 +1,57 @@
 class Solution {
   public:
-  
-    bool DFS(int node,int parent,vector<int>adj[],vector<bool>&visited)
-    {
-        visited[node]=1;
-        for(int j=0;j<adj[node].size();j++)
-        {
-            // 3cases
-            //1st agr parent hai to skip
-            //2nd agr already visited hai to return 1 mtlb cycle hai
-            //3rd nhi to dfs chalao isi node se
-            if(parent==adj[node][j])
-            {
-                continue;
-            }
-            if(visited[adj[node][j]])
-            {
-                return 1;
-            }
-             if(DFS(adj[node][j],node,adj,visited))
-            {
-                return 1;
-            }
+   bool detect(int src,vector<int> adj[],int vis[])
+   {
+       
+       
+       vis[src]=1;
+       queue<pair<int,int>>q;
+       q.push({src,-1});
+       
+       while(!q.empty())
+       {
+           int node=q.front().first;
+           int parent=q.front().second;
+           q.pop();
            
-            
-         }
-         return 0;
-        
-    }
-    bool isCycle(int V, vector<vector<int>>& edges) {
+           for(auto adjacentNode:adj[node])
+           {
+               if(!vis[adjacentNode])
+               {
+                   vis[adjacentNode]=1;
+                   q.push({adjacentNode,node});
+                   
+               }
+               else if(parent!=adjacentNode) return true;
+           }
+       }
+       return false;
+       
+   }
+   
+   
+    bool isCycle(int n, vector<vector<int>>& edges) {
         // Code here
+        vector<int> adj[n];
         
-        
-        // Step 1:  edge diya hua hai to hme adjacency list me convert krna pdega
-        vector<int> adj[V];
-        
-        for(auto edge : edges)
-        {
-            int u = edge[0];
-            int v = edge[1];
-            
-            adj[u].push_back(v);
-            adj[v].push_back(u);
-        }
-        
-        // dfs
-        vector<bool>visited(V,0);
-        
-        //handle multiple component
-        for(int i=0;i<V;i++)
-        {
-            if(!visited[i])
+            for(auto it : edges)
             {
-                if(DFS(i,-1,adj,visited))
+                int u = it[0];
+                int v = it[1];
+            
+                adj[u].push_back(v);
+                adj[v].push_back(u);
+            }
+            
+            int vis[n]={0};
+            for(int i=0;i<n;i++)
+            {
+                if(!vis[i])
                 {
-                    return 1;
+                    if(detect(i,adj,vis)) return true;
                 }
             }
-        
-        
-        }
-        return 0;
+            return false;
         
     }
 };
