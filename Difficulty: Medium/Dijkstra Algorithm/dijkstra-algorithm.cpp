@@ -16,41 +16,37 @@ class Solution {
 			adj[v].push_back({u, w}); // agar graph undirected hai
 		}
 		
-		vector<bool>explored(V, 0);
+// 		vector<bool>explored(V, 0);
 		vector<int>dist(V, INT_MAX);
 		
 		dist[src] = 0;
 		
-	
+		priority_queue<pair<int, int>, vector<pair<int, int>>, greater<pair<int, int>> >p;
+		p.push({0, src});
 		
-		priority_queue<	pair<int,int> ,vector<	pair<int,int>>,greater<	pair<int,int>>>p;
-		p.push({0,src});
-		
-		
-		while(!p.empty())
-		{
-		    int node=p.top().second;
-		    p.pop();
-		    if(explored[node]==1) continue;
-		    
-		    explored[node]=1;
-		    
-		
-	
-			explored[node] = 1;
+		while (!p.empty())
+			{
+			    int dis=p.top().first;
+			int node = p.top().second;
+			p.pop();
+// 			if (explored[node] == 1)
+// 				continue;
 			
-			// relax the edges
-			for (int j = 0; j<adj[node].size(); j++)
-				{
-				int neighbour = adj[node][j].first;
-				int weight = adj[node][j].second;
-				
-				if (!explored[neighbour] && dist[node]+weight <dist[neighbour])
-					{
-					dist[neighbour] = dist[node]+weight;
-					p.push({dist[neighbour],neighbour});
-				}
-			}
+		
+// 			explored[node] = 1;
+            for(auto it:adj[node])
+            {
+                int edgeWeight=it.second;
+                int adjNode=it.first;
+                if(dis+edgeWeight<dist[adjNode])
+                {
+                    dist[adjNode]=dis+edgeWeight;
+                    p.push({dist[adjNode],adjNode});
+                }
+                
+            }
+        			
+		
 		}
 		return dist;
 		
